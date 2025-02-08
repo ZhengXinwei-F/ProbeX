@@ -13,10 +13,10 @@ Probex is a simple command-line tool to check the availability of TCP, HTTP, and
 
 ## Installation ⚙️
 
-To install Probex, clone the repository and build the project:
+To install ProbeX, clone the repository and build the project:
 
 ```bash
-git clone https://github.com/yourusername/probex.git
+git clone https://github.com/ZhengXinwei-F/ProbeX.git
 cd probex
 go build -o probex .
 ```
