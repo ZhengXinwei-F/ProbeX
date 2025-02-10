@@ -5,10 +5,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/spf13/cobra"
+
 	"github.com/ZhengXinwei-F/ProbeX/grpc"
 	"github.com/ZhengXinwei-F/ProbeX/http"
 	"github.com/ZhengXinwei-F/ProbeX/tcp"
-	"github.com/spf13/cobra"
 )
 
 func main() {
