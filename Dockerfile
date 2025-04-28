@@ -4,20 +4,28 @@ FROM golang:1.22-alpine AS builder
 # Set the Current Working Directory inside the container
 WORKDIR /probex
 
-# Copy the source code into the container
+# Copy the source code
 COPY . .
 
-# Build the Go app
-RUN GOOS=linux GOARCH=amd64 go build -o probex .
+# Build for the target architecture
+ARG TARGETARCH
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} go build -o probex .
 
-# Stage 2: Create the minimal production image
+# Stage 2: Create minimal production image
 FROM alpine:latest
 
-# Set the Current Working Directory inside the container
-WORKDIR /root/
+# Create a non-root user (UID/GID 1000 is the standard non-privileged user in Alpine)
+RUN addgroup -g 1000 appuser && \
+    adduser -u 1000 -G appuser -D appuser && \
+    mkdir -p /probex && \
+    chown -R 1000:1000 /probex
 
-# Copy the pre-built binary from the builder image
-COPY --from=builder /probex/probex .
+# Set working directory and permissions
+WORKDIR /probex
+COPY --from=builder --chown=1000:1000 /probex/probex .
 
-# Command to run the binary
+# Switch to the non-privileged user
+USER 1000
+
+# Run the program
 CMD ["./probex"]
